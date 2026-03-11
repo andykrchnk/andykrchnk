@@ -13,33 +13,31 @@ interface Social {
   name: string;
   href: string;
   linkTitle: string;
+  active?: boolean;
   icon: (_props: Props) => Element;
 }
 
 export const SOCIALS: Social[] = [
   {
-    name: "GitHub",
-    href: "https://github.com/satnaing/astro-paper",
-    linkTitle: `${SITE.title} on GitHub`,
+    name: "Github",
+    href: "https://github.com/andykrchnk",
+    linkTitle: `${SITE.author} on GitHub`,
+    active: true,
     icon: IconGitHub,
   },
   {
-    name: "X",
-    href: "https://x.com/username",
-    linkTitle: `${SITE.title} on X`,
+    name: "Twitter",
+    href: "https://twitter.com/andykrchnk",
+    linkTitle: `${SITE.author} on Twitter / X`,
+    active: true,
     icon: IconBrandX,
   },
   {
     name: "LinkedIn",
-    href: "https://www.linkedin.com/in/username/",
-    linkTitle: `${SITE.title} on LinkedIn`,
+    href: "https://www.linkedin.com/in/andy-kyrychenko/",
+    linkTitle: `${SITE.author} on LinkedIn`,
+    active: true,
     icon: IconLinkedin,
-  },
-  {
-    name: "Mail",
-    href: "mailto:yourmail@gmail.com",
-    linkTitle: `Send an email to ${SITE.title}`,
-    icon: IconMail,
   },
 ] as const;
 
