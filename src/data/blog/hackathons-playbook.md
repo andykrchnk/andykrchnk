@@ -1,6 +1,6 @@
 ---
-title: I placed in 6 hackathons out of 8. Here is what separates teams that place from teams that don't.
-pubDatetime: 2026-03-13T17:37:10.470Z
+title: How to win a hackathon. Here is what separates teams that place from teams that don't.
+pubDatetime: 2026-03-13T16:37:10.470Z
 description: ""
 draft: false
 ---
