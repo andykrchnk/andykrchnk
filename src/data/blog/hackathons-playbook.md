@@ -95,7 +95,3 @@ You would not have the same experience if you are brought steak on a plate that 
    This one hurt once. We had a perfect pre-pitch — the judges were visibly impressed, we had the energy, we were going to win. Then the final presentation lagged. The organisers ran it from their machine using the browser version of PowerPoint instead of the desktop app. It froze, killing our pitch entirely. This could have been avoided by just running it from our Mac.
 1. **Prepare for the QA in advance**
    After your final slide, add hidden slides with answers to the obvious questions — pricing, limitations, future plans, how you'd scale it. When a judge asks something you anticipated, you flip to a slide with the answer already on it. People immediately perceive you different because you came prepared.
-
----
-
-\I'm Andy — building a software studio and an early stage startup from Bratislava.
