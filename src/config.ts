@@ -2,7 +2,8 @@ export const SITE = {
   website: "https://andykrchnk.com/",
   author: "Andy Kyrychenko",
   profile: "https://github.com/andykrchnk",
-  desc: "Thoughts on code, life & everything in between.",
+  desc: `I'm Andy — a 20-year-old developer from Bratislava. \n
+   Building a software studio, build startups, and spend way too much time at hackathons.`,
   title: "Andy Kyrychenko",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
