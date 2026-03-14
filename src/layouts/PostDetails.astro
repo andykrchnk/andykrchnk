@@ -7,6 +7,7 @@ import Datetime from "@/components/Datetime.astro";
 import EditPost from "@/components/EditPost.astro";
 import Footer from "@/components/Footer.astro";
 import Header from "@/components/Header.astro";
+import NewsletterForm from "@/components/NewsletterForm.astro";
 import ShareLinks from "@/components/ShareLinks.astro";
 import { SITE } from "@/config";
 import Layout from "@/layouts/Layout.astro";
@@ -110,6 +111,8 @@ const nextPost =
     >
       <Content />
     </article>
+
+    <NewsletterForm />
 
     <hr class="my-8 border-dashed" />
 
