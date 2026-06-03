@@ -21,7 +21,7 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 <Layout>
   <Header />
   <main id="main-content" data-layout="index" class="app-layout">
-    <section id="hero" class:list={["pt-8 pb-6", "border-b border-border"]}>
+    <section id="hero" class="pt-8 pb-6">
       <div
         class="flex flex-col gap-6 sm:grid sm:grid-cols-[200px_minmax(0,1fr)] sm:gap-8"
       >
@@ -81,10 +81,7 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
       featuredPosts.length > 0 && (
         <section
           id="featured"
-          class:list={[
-            "pt-12 pb-6",
-            { "border-b border-border": recentPosts.length > 0 },
-          ]}
+          class="pt-12 pb-6"
         >
           <h2 class="text-2xl font-semibold tracking-wide">Featured</h2>
           <ul>

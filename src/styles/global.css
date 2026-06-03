@@ -13,7 +13,7 @@ html[data-theme="light"] {
 }
 
 html[data-theme="dark"] {
-  --color-fill: #000000;
+  --color-fill: #1c1c1c;
   --color-text-base: #f0efe4;
   /* --color-text-base: #909090; */
   --color-accent: #6a8ec2;
@@ -35,6 +35,14 @@ html[data-theme="dark"] {
   --color-accent: var(--accent);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --text-xs: 0.625rem;
+  --text-sm: 0.75rem;
+  --text-base: 0.875rem;
+  --text-lg: 1rem;
+  --text-xl: 1.125rem;
+  --text-2xl: 1.375rem;
+  --text-3xl: 1.625rem;
+  --text-4xl: 1.875rem;
 }
 
 @layer base {
@@ -49,7 +57,7 @@ html[data-theme="dark"] {
   }
 
   body {
-    @apply flex min-h-svh flex-col bg-background font-app text-foreground selection:bg-accent/75 selection:text-background;
+    @apply flex min-h-svh flex-col bg-background font-app text-base text-foreground selection:bg-accent/75 selection:text-background;
   }
 
   a,
