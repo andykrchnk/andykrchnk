@@ -122,7 +122,7 @@ const getLogoStyle = (item: LogoStyleItem) =>
       </div>
     </section>
 
-    <section class="index-section" aria-labelledby="work-title">
+    <section class="index-section index-section--after-hero" aria-labelledby="work-title">
       <h2 id="work-title" class="section-label">work</h2>
       <ul class="index-list">
         {
@@ -260,7 +260,11 @@ const getLogoStyle = (item: LogoStyleItem) =>
   }
 
   .index-section {
-    padding-block: 1.25rem;
+    padding-block: 0 1.25rem;
+  }
+
+  .index-section--after-hero {
+    margin-top: 1.5rem;
   }
 
   .section-label {

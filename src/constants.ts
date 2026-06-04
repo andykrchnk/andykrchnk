@@ -39,6 +39,13 @@ export const SOCIALS: Social[] = [
     active: true,
     icon: IconLinkedin,
   },
+  {
+    name: "Email",
+    href: "mailto:contact@akyrychenko.com",
+    linkTitle: `Email ${SITE.author}`,
+    active: true,
+    icon: IconMail,
+  },
 ] as const;
 
 export const SHARE_LINKS: Social[] = [
