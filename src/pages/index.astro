@@ -1,121 +1,353 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
-import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Socials from "@/components/Socials.astro";
-import LinkButton from "@/components/LinkButton.astro";
-import Card from "@/components/Card.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
-import IconRss from "@/assets/icons/IconRss.svg";
-import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
-import { SITE } from "@/config";
+import { getPath } from "@/utils/getPath";
 
 const posts = await getCollection("blog");
 
 const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const recentPosts = sortedPosts.slice(0, 4);
+
+const work = [
+  {
+    name: "Kavo Studio",
+    role: "Co-founder",
+    date: "2026 - Now",
+    logo: "/kavo-logo-dark.png",
+  },
+  {
+    name: "InCanopy",
+    role: "Software Engineer",
+    date: "2023 - Now",
+    href: "https://incanopy.com.au",
+    logo: "/incanopy-logo.svg",
+  },
+  {
+    name: "Rentacc",
+    role: "Software Engineer",
+    date: "2023 - 2025",
+    logo: "/rentacc-logo.svg",
+  },
+];
+
+const projects = [
+  {
+    name: "Renwio",
+    description: "Proof of work software for FM companies",
+    href: "https://renwio.com",
+    logo: "/renwio-logo.png",
+  },
+  {
+    name: "Moonvert",
+    description: "Beautiful local file converter",
+    href: "https://moonvert.app",
+    logo: "/moonvert-logo.png",
+  },
+];
 ---
 
 <Layout>
-  <Header />
+  <!-- <Header /> -->
   <main id="main-content" data-layout="index" class="app-layout">
-    <section id="hero" class="pt-8 pb-6">
-      <div
-        class="flex flex-col gap-6 sm:grid sm:grid-cols-[200px_minmax(0,1fr)] sm:gap-8"
-      >
-        <div
-          class="mx-auto size-32 overflow-hidden rounded-full ring-1 ring-border sm:mx-0 sm:size-[170px]"
-        >
+    <section id="hero">
+      <div>
+        <div class="intro-title-row">
           <img
             src="/profile-picture.png"
-            alt={`${SITE.author} avatar`}
+            alt="Portrait of Andy Kyrychenko"
             width="256"
             height="256"
             loading="eager"
-            class="size-full object-cover"
+            class="intro-photo"
           />
+          <h1
+            class="text-lg leading-7 font-medium tracking-normal text-foreground"
+          >
+            <strong class="font-bold text-accent">Andy Kyrychenko</strong> is a
+            software engineer.
+          </h1>
         </div>
-
-        <div class="sm:flex sm:h-[170px] sm:flex-col sm:justify-center">
-          <div class="flex flex-wrap items-center gap-3">
-            <h1 class="inline-block text-2xl font-bold sm:text-4xl">
-              Hi, I'm @andykrchnk
-            </h1>
-            <a
-              target="_blank"
-              href="/rss.xml"
-              class="inline-block"
-              aria-label="rss feed"
-              title="RSS Feed"
-            >
-              <IconRss
-                width={20}
-                height={20}
-                class="scale-125 stroke-accent stroke-3 rtl:-rotate-90"
-              />
-              <span class="sr-only">RSS Feed</span>
-            </a>
-          </div>
-
-          <!-- <p class="mt-3">
-            I'm Andy — a 20-year-old developer from Bratislava.
-            <br />
-            Building a software studio, build startups, and spend way too much time
-            at hackathons.
-          </p> -->
-          <p class="mt-2">{SITE.desc}</p>
-          {
-            (
-              <div class="mt-2 flex max-sm:flex-col sm:items-center">
-                <Socials />
-              </div>
-            )
-          }
+        <div
+          class="intro-copy mt-10 flex max-w-[39rem] flex-col gap-2 text-base leading-7 font-medium tracking-normal text-muted"
+        >
+          <p>
+            I'm a software engineer and entrepreneur based in Bratislava.
+          </p>
+          <p>
+            Today, I'm focused on building <a href="https://renwio.com"
+              >Renwio</a
+            >, a platform for facility management companies, while helping
+            founders and businesses bring products to market through <a
+              href="https://kavo.studio/">Kavo Studio</a
+            >.
+          </p>
+          <p>
+            Over the past few years, I've worked with startups across different
+            industries, including <a href="https://incanopy.com.au"
+              >InCanopy</a
+            >, where I contributed to software used to visualize and analyze
+            urban environmental data at city scale.
+          </p>
+          <p>
+            I enjoy operating at the intersection of engineering, product, and
+            business: from writing code and designing systems to validating ideas
+            with customers.
+          </p>
         </div>
+      </div>
+      <div class="mt-6 flex items-center gap-3 text-muted">
+        <Socials />
       </div>
     </section>
 
+    <section class="index-section" aria-labelledby="work-title">
+      <h2 id="work-title" class="section-label">work</h2>
+      <ul class="index-list">
+        {
+          work.map(item => {
+            const Row = item.href ? "a" : "div";
+            return (
+              <li>
+                {
+                  item.logo ? (
+                    <img
+                      src={item.logo}
+                      alt=""
+                      width="32"
+                      height="32"
+                      class="item-logo"
+                    />
+                  ) : (
+                    <span class="item-mark" aria-hidden="true">
+                      {item.name.slice(0, 1)}
+                    </span>
+                  )
+                }
+                <Row href={item.href} class="item-copy item-link">
+                  <h3>{item.name}</h3>
+                  <p>{item.role}</p>
+                </Row>
+                <time>{item.date}</time>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </section>
+
+    <section class="index-section" aria-labelledby="projects-title">
+      <h2 id="projects-title" class="section-label">projects</h2>
+      <ul class="index-list">
+        {
+          projects.map(item => {
+            const Row = item.href ? "a" : "div";
+            return (
+              <li>
+                {
+                  item.logo ? (
+                    <img
+                      src={item.logo}
+                      alt=""
+                      width="32"
+                      height="32"
+                      class="item-logo"
+                    />
+                  ) : (
+                    <span class="item-mark project-mark" aria-hidden="true">
+                      {item.name.slice(0, 1)}
+                    </span>
+                  )
+                }
+                <Row href={item.href} class="item-copy item-link">
+                  <h3>{item.name}</h3>
+                  <p>{item.description}</p>
+                </Row>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </section>
+
     {
-      featuredPosts.length > 0 && (
+      recentPosts.length > 0 && (
         <section
-          id="featured"
-          class="pt-12 pb-6"
+          id="recent-posts"
+          class="index-section"
+          aria-labelledby="posts-title"
         >
-          <h2 class="text-2xl font-semibold tracking-wide">Featured</h2>
-          <ul>
-            {featuredPosts.map(data => (
-              <Card variant="h3" {...data} />
+          <h2 id="posts-title" class="section-label">thoughts</h2>
+          <ul class="index-list">
+            {recentPosts.map(post => (
+              <li>
+                <span class="post-dot" aria-hidden="true"></span>
+                <a href={getPath(post.id, post.filePath)} class="item-copy item-link">
+                  <h3>{post.data.title}</h3>
+                </a>
+                <time datetime={post.data.pubDatetime.toISOString()}>
+                  {post.data.pubDatetime.toLocaleDateString("en", {
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </time>
+              </li>
             ))}
           </ul>
         </section>
       )
     }
-
-    {
-      recentPosts.length > 0 && (
-        <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-semibold tracking-wide">Recent Posts</h2>
-          <ul>
-            {recentPosts.map(
-              (data, index) =>
-                index < SITE.postPerIndex && <Card variant="h3" {...data} />
-            )}
-          </ul>
-        </section>
-      )
-    }
-
-    <div class="my-8 text-center">
-      <LinkButton href="/posts/">
-        All Posts
-        <IconArrowRight class="inline-block rtl:-rotate-180" />
-      </LinkButton>
-    </div>
   </main>
   <Footer />
 </Layout>
+
+<style>
+  .intro-title-row {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    justify-content: flex-start;
+    text-align: center;
+  }
+
+  .intro-photo {
+    aspect-ratio: 1;
+    border-radius: 22%;
+    display: block;
+    filter: grayscale(1) contrast(1.05);
+    object-fit: cover;
+    opacity: 0.9;
+    width: 96px;
+  }
+
+  .intro-copy a {
+    color: var(--foreground);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  .intro-copy a:hover {
+    color: var(--accent);
+  }
+
+  .index-section {
+    padding-block: 1.25rem;
+  }
+
+  .section-label {
+    color: var(--muted);
+    font-size: var(--text-base);
+    font-weight: 500;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+  }
+
+  .index-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    list-style: none;
+    padding: 0;
+  }
+
+  .index-list li {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+    min-height: 4.5rem;
+  }
+
+  .item-mark {
+    align-items: center;
+    background: color-mix(in oklch, var(--foreground) 8%, transparent);
+    border-radius: 28%;
+    color: color-mix(in oklch, var(--foreground) 72%, transparent);
+    display: inline-flex;
+    font-size: 0.7rem;
+    font-weight: 700;
+    height: 2rem;
+    justify-content: center;
+    width: 2rem;
+  }
+
+  .project-mark {
+    background: color-mix(in oklch, var(--accent) 22%, transparent);
+    color: var(--accent);
+  }
+
+  .post-dot {
+    background: color-mix(in oklch, var(--foreground) 30%, transparent);
+    border-radius: 28%;
+    display: block;
+    height: 0.45rem;
+    margin-inline: 0.775rem;
+    width: 0.45rem;
+  }
+
+  .item-copy {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-decoration: none;
+  }
+
+  .item-copy h3 {
+    color: var(--foreground);
+    font-size: var(--text-base);
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .item-copy p {
+    color: var(--muted);
+    font-size: var(--text-base);
+    font-weight: 500;
+    line-height: 1.45;
+    margin-top: 0.1rem;
+  }
+
+  .item-link:hover h3 {
+    color: var(--accent);
+  }
+
+  .index-list time {
+    color: var(--muted);
+    flex: 0 0 auto;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .item-logo {
+    aspect-ratio: 1;
+    border-radius: 28%;
+    display: block;
+    height: 2rem;
+    object-fit: cover;
+    width: 2rem;
+  }
+
+  @media (max-width: 560px) {
+    .intro-photo {
+      width: 96px;
+    }
+
+    .index-list li {
+      align-items: start;
+      flex-wrap: wrap;
+      padding-block: 0.5rem;
+    }
+
+    .index-list time {
+      margin-left: 3.5rem;
+      width: calc(100% - 3.5rem);
+    }
+  }
+</style>
 
 <script>
   document.addEventListener("astro:page-load", () => {
