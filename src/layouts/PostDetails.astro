@@ -1,14 +1,6 @@
 ---
-import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
-import IconChevronRight from "@/assets/icons/IconChevronRight.svg";
-import BackButton from "@/components/BackButton.astro";
-import BackToTopButton from "@/components/BackToTopButton.astro";
-import Datetime from "@/components/Datetime.astro";
-import EditPost from "@/components/EditPost.astro";
 import Footer from "@/components/Footer.astro";
-import Header from "@/components/Header.astro";
-import NewsletterForm from "@/components/NewsletterForm.astro";
-import ShareLinks from "@/components/ShareLinks.astro";
+import SiteNav from "@/components/SiteNav.astro";
 import { SITE } from "@/config";
 import Layout from "@/layouts/Layout.astro";
 import { getPath } from "@/utils/getPath";
@@ -30,8 +22,6 @@ const {
   canonicalURL,
   pubDatetime,
   modDatetime,
-  timezone,
-  hideEditPost,
 } = post.data;
 
 const { Content } = await render(post);
@@ -78,86 +68,145 @@ const currentPostIndex = allPosts.findIndex(a => a.id === post.id);
 
 const prevPost = currentPostIndex !== 0 ? allPosts[currentPostIndex - 1] : null;
 const nextPost =
-  currentPostIndex !== allPosts.length ? allPosts[currentPostIndex + 1] : null;
+  currentPostIndex < allPosts.length - 1
+    ? allPosts[currentPostIndex + 1]
+    : null;
+
+const formattedPubDate = pubDatetime.toLocaleDateString("en", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+});
 ---
 
 <Layout {...layoutProps}>
-  <Header />
-  <BackButton />
-  <main
-    id="main-content"
-    class:list={["app-layout pb-12", { "mt-8": !SITE.showBackButton }]}
-  >
-    <h1
-      transition:name={slugifyStr(title.replaceAll(".", "-"))}
-      class="inline-block text-2xl font-bold text-accent sm:text-3xl"
-    >
-      {title}
-    </h1>
-    <div class="my-2 flex items-center gap-2">
-      <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
-      <span
-        aria-hidden="true"
-        class:list={[
-          "max-sm:hidden",
-          { hidden: !SITE.editPost.enabled || hideEditPost },
-        ]}>|</span
-      >
-      <EditPost {hideEditPost} {post} class="max-sm:hidden" />
-    </div>
+  <SiteNav />
+  <main id="main-content" class="app-layout post-page">
+    <a href="/posts" class="back-link">thoughts</a>
+    <header class="post-header">
+      <h1 transition:name={slugifyStr(title.replaceAll(".", "-"))}>
+        {title}
+      </h1>
+      <time datetime={pubDatetime.toISOString()}>{formattedPubDate}</time>
+    </header>
     <article
       id="article"
-      class="app-prose mt-8 w-full max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
+      class="app-prose article-body w-full max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
     >
       <Content />
     </article>
 
-    <NewsletterForm />
-
-    <div class="my-8" aria-hidden="true"></div>
-
-    <EditPost class="sm:hidden" {hideEditPost} {post} />
-
-    <BackToTopButton />
-
-    <ShareLinks />
-
-    <div class="my-6" aria-hidden="true"></div>
-
-    <!-- Previous/Next Post Buttons -->
-    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    <nav class="post-nav" aria-label="Adjacent posts">
       {
         prevPost && (
-          <a
-            href={getPath(prevPost.id, prevPost.filePath)}
-            class="flex w-full gap-1 hover:opacity-75"
-          >
-            <IconChevronLeft class="inline-block flex-none rtl:rotate-180" />
-            <div>
-              <span>Previous Post</span>
-              <div class="text-sm text-accent/85">{prevPost.title}</div>
-            </div>
+          <a href={getPath(prevPost.id, prevPost.filePath)}>
+            <span>previous</span>
+            <strong>{prevPost.title}</strong>
           </a>
         )
       }
       {
         nextPost && (
-          <a
-            href={getPath(nextPost.id, nextPost.filePath)}
-            class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"
-          >
-            <div>
-              <span>Next Post</span>
-              <div class="text-sm text-accent/85">{nextPost.title}</div>
-            </div>
-            <IconChevronRight class="inline-block flex-none rtl:rotate-180" />
+          <a href={getPath(nextPost.id, nextPost.filePath)}>
+            <span>next</span>
+            <strong>{nextPost.title}</strong>
           </a>
         )
       }
-    </div>
+    </nav>
   </main>
   <Footer />
 </Layout>
+
+<style>
+  .post-page {
+    padding-block: 124px;
+  }
+
+  .back-link {
+    color: var(--muted);
+    display: inline-flex;
+    font-size: var(--text-base);
+    font-weight: 500;
+    line-height: 1.5;
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .post-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 3rem;
+  }
+
+  .post-header h1 {
+    color: var(--foreground);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    line-height: 1.2;
+    max-width: 42rem;
+  }
+
+  .post-header time {
+    color: var(--muted);
+    font-size: var(--text-sm);
+    font-weight: 500;
+  }
+
+  .article-body {
+    margin-top: 3rem;
+  }
+
+  .post-nav {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 4rem;
+  }
+
+  .post-nav a {
+    color: var(--foreground);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+    text-decoration: none;
+  }
+
+  .post-nav a:last-child {
+    text-align: right;
+  }
+
+  .post-nav span {
+    color: var(--muted);
+    font-size: var(--text-sm);
+    font-weight: 500;
+  }
+
+  .post-nav strong {
+    font-size: var(--text-base);
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .post-nav a:hover strong {
+    color: var(--accent);
+  }
+
+  @media (max-width: 560px) {
+    .post-nav {
+      grid-template-columns: 1fr;
+    }
+
+    .post-nav a:last-child {
+      text-align: left;
+    }
+  }
+</style>
 
 <script is:inline data-astro-rerun>
   /** Create a progress indicator

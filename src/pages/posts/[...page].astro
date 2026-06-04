@@ -1,14 +1,14 @@
 ---
 import type { GetStaticPaths } from "astro";
 import { getCollection } from "astro:content";
-import Main from "@/layouts/Main.astro";
-import Layout from "@/layouts/Layout.astro";
-import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import Card from "@/components/Card.astro";
 import Pagination from "@/components/Pagination.astro";
-import getSortedPosts from "@/utils/getSortedPosts";
+import SiteNav from "@/components/SiteNav.astro";
 import { SITE } from "@/config";
+import Layout from "@/layouts/Layout.astro";
+import getSortedPosts from "@/utils/getSortedPosts";
+import { getPath } from "@/utils/getPath";
+import { slugifyStr } from "@/utils/slugify";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -18,15 +18,118 @@ export const getStaticPaths = (async ({ paginate }) => {
 const { page } = Astro.props;
 ---
 
-<Layout title={`Posts | ${SITE.title}`}>
-  <Header />
-  <Main pageTitle="Posts" pageDesc="All the articles I've posted.">
-    <ul>
-      {page.data.map(data => <Card {...data} />)}
-    </ul>
-  </Main>
-
-  <Pagination {page} />
-
+<Layout title={`Thoughts | ${SITE.title}`}>
+  <SiteNav />
+  <main id="main-content" class="app-layout posts-page">
+    <section class="posts-section" aria-labelledby="posts-title">
+      <h1 id="posts-title" class="section-label">thoughts</h1>
+      <ul class="post-list">
+        {
+          page.data.map(post => (
+            <li>
+              <span class="post-dot" aria-hidden="true" />
+              <a
+                href={getPath(post.id, post.filePath)}
+                class="post-link"
+                style={{
+                  viewTransitionName: slugifyStr(
+                    post.data.title.replaceAll(".", "-")
+                  ),
+                }}
+              >
+                {post.data.title}
+              </a>
+              <time datetime={post.data.pubDatetime.toISOString()}>
+                {post.data.pubDatetime.toLocaleDateString("en", {
+                  month: "short",
+                  year: "numeric",
+                })}
+              </time>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+    <Pagination {page} />
+  </main>
   <Footer noMarginTop={page.lastPage > 1} />
 </Layout>
+
+<style>
+  .posts-page {
+    padding-block: 124px;
+  }
+
+  .posts-section {
+    padding-block: 1.25rem;
+  }
+
+  .section-label {
+    color: var(--muted);
+    font-size: var(--text-base);
+    font-weight: 500;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+  }
+
+  .post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    list-style: none;
+    padding: 0;
+  }
+
+  .post-list li {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+    min-height: 4.5rem;
+  }
+
+  .post-dot {
+    background: color-mix(in oklch, var(--foreground) 30%, transparent);
+    border-radius: 28%;
+    display: block;
+    flex: 0 0 auto;
+    height: 0.45rem;
+    margin-inline: 0.775rem;
+    width: 0.45rem;
+  }
+
+  .post-link {
+    color: var(--foreground);
+    flex: 1 1 auto;
+    font-size: var(--text-base);
+    font-weight: 600;
+    line-height: 1.35;
+    min-width: 0;
+    text-decoration: none;
+  }
+
+  .post-link:hover {
+    color: var(--accent);
+  }
+
+  .post-list time {
+    color: var(--muted);
+    flex: 0 0 auto;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 560px) {
+    .post-list li {
+      align-items: start;
+      flex-wrap: wrap;
+      padding-block: 0.5rem;
+    }
+
+    .post-list time {
+      margin-left: 3.5rem;
+      width: calc(100% - 3.5rem);
+    }
+  }
+</style>

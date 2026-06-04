@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Footer from "@/components/Footer.astro";
+import SiteNav from "@/components/SiteNav.astro";
 import Socials from "@/components/Socials.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
 import { getPath } from "@/utils/getPath";
@@ -24,12 +25,18 @@ const work = [
     date: "2023 - Now",
     href: "https://incanopy.com.au",
     logo: "/incanopy-logo.svg",
+    logoBg: "#183b2a",
+    logoBorder: "#183b2a",
+    logoPadding: "0.28rem",
   },
   {
     name: "Rentacc",
     role: "Software Engineer",
     date: "2023 - 2025",
     logo: "/rentacc-logo.svg",
+    logoBg: "#f5ddd8",
+    logoBorder: "#f5ddd8",
+    logoPadding: "0.22rem",
   },
 ];
 
@@ -47,10 +54,22 @@ const projects = [
     logo: "/moonvert-logo.png",
   },
 ];
+
+type LogoStyleItem = {
+  logo?: string;
+  logoBg?: string;
+  logoBorder?: string;
+  logoPadding?: string;
+};
+
+const getLogoStyle = (item: LogoStyleItem) =>
+  `--logo-bg: ${item.logoBg ?? "transparent"}; --logo-border: ${
+    item.logoBorder ?? "transparent"
+  }; --logo-padding: ${item.logoPadding ?? "0"}`;
 ---
 
 <Layout>
-  <!-- <Header /> -->
+  <SiteNav />
   <main id="main-content" data-layout="index" class="app-layout">
     <section id="hero">
       <div>
@@ -81,7 +100,7 @@ const projects = [
               >Renwio</a
             >, a platform for facility management companies, while helping
             founders and businesses bring products to market through <a
-              href="https://kavo.studio/">Kavo Studio</a
+              href="https://kavostudio.dev/">Kavo Studio</a
             >.
           </p>
           <p>
@@ -113,13 +132,15 @@ const projects = [
               <li>
                 {
                   item.logo ? (
-                    <img
-                      src={item.logo}
-                      alt=""
-                      width="32"
-                      height="32"
-                      class="item-logo"
-                    />
+                    <span class="item-logo-frame" style={getLogoStyle(item)}>
+                      <img
+                        src={item.logo}
+                        alt=""
+                        width="32"
+                        height="32"
+                        class="item-logo"
+                      />
+                    </span>
                   ) : (
                     <span class="item-mark" aria-hidden="true">
                       {item.name.slice(0, 1)}
@@ -148,13 +169,15 @@ const projects = [
               <li>
                 {
                   item.logo ? (
-                    <img
-                      src={item.logo}
-                      alt=""
-                      width="32"
-                      height="32"
-                      class="item-logo"
-                    />
+                    <span class="item-logo-frame" style={getLogoStyle(item)}>
+                      <img
+                        src={item.logo}
+                        alt=""
+                        width="32"
+                        height="32"
+                        class="item-logo"
+                      />
+                    </span>
                   ) : (
                     <span class="item-mark project-mark" aria-hidden="true">
                       {item.name.slice(0, 1)}
@@ -179,7 +202,9 @@ const projects = [
           class="index-section"
           aria-labelledby="posts-title"
         >
-          <h2 id="posts-title" class="section-label">thoughts</h2>
+          <h2 id="posts-title" class="section-label">
+            <a href="/posts">thoughts</a>
+          </h2>
           <ul class="index-list">
             {recentPosts.map(post => (
               <li>
@@ -244,6 +269,15 @@ const projects = [
     font-weight: 500;
     line-height: 1.5;
     margin-bottom: 1.5rem;
+  }
+
+  .section-label a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .section-label a:hover {
+    color: var(--accent);
   }
 
   .index-list {
@@ -322,13 +356,25 @@ const projects = [
     white-space: nowrap;
   }
 
-  .item-logo {
+  .item-logo-frame {
+    align-items: center;
     aspect-ratio: 1;
+    background: var(--logo-bg);
+    border: 1px solid var(--logo-border);
     border-radius: 28%;
+    display: inline-flex;
+    height: 2.5rem;
+    justify-content: center;
+    overflow: hidden;
+    padding: var(--logo-padding);
+    width: 2.5rem;
+  }
+
+  .item-logo {
     display: block;
-    height: 2rem;
-    object-fit: cover;
-    width: 2rem;
+    height: 100%;
+    object-fit: contain;
+    width: 100%;
   }
 
   @media (max-width: 560px) {

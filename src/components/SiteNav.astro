@@ -1,0 +1,124 @@
+---
+import IconMoon from "@/assets/icons/IconMoon.svg";
+import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
+import { SITE } from "@/config";
+
+const { pathname } = Astro.url;
+const currentPath =
+  pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
+
+const isActive = (path: string) => {
+  if (path === "/") return currentPath === "/";
+  return currentPath === path || currentPath.startsWith(`${path}/`);
+};
+---
+
+<a
+  id="skip-to-content"
+  href="#main-content"
+  class="absolute start-4 -top-full z-50 bg-background px-3 py-2 text-accent transition-all focus:top-4"
+>
+  Skip to content
+</a>
+
+<header class="app-layout site-nav">
+  <div class="site-nav__stack">
+    <nav class="site-nav__links" aria-label="Primary navigation">
+      <a href="/" class:list={{ active: isActive("/") }}>home</a>
+      <a href="/posts" class:list={{ active: isActive("/posts") }}>thoughts</a>
+    </nav>
+    {
+      SITE.lightAndDarkMode && (
+        <button
+          id="theme-btn"
+          class="site-nav__theme"
+          title="Toggle light and dark theme"
+          aria-label="auto"
+          aria-live="polite"
+        >
+          <IconMoon class="theme-icon theme-icon--moon" />
+          <IconSunHigh class="theme-icon theme-icon--sun" />
+        </button>
+      )
+    }
+  </div>
+</header>
+
+<style>
+  .site-nav {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding-block: 2rem 0;
+  }
+
+  .site-nav__stack {
+    align-items: center;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.35rem;
+  }
+
+  .site-nav__links a,
+  .site-nav__theme {
+    color: var(--muted);
+    font-size: var(--text-base);
+    font-weight: 500;
+    line-height: 1.5;
+    text-decoration: none;
+  }
+
+  .site-nav__links a:hover,
+  .site-nav__links a.active {
+    color: var(--accent);
+  }
+
+  .site-nav__links {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+  }
+
+  .site-nav__theme {
+    align-items: center;
+    display: inline-flex;
+    height: 1.5rem;
+    justify-content: center;
+    padding: 0;
+    position: relative;
+    width: 1.5rem;
+  }
+
+  .site-nav__theme:hover {
+    color: var(--accent);
+  }
+
+  .theme-icon {
+    height: 1rem;
+    position: absolute;
+    transition:
+      opacity 160ms ease,
+      transform 160ms ease;
+    width: 1rem;
+  }
+
+  .theme-icon--moon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+
+  .theme-icon--sun {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.7);
+  }
+
+  :global(html[data-theme="dark"]) .theme-icon--moon {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.7);
+  }
+
+  :global(html[data-theme="dark"]) .theme-icon--sun {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+</style>
